@@ -9,38 +9,62 @@ public class NumberToWordParser {
 
 
     public static String numberToWordConverter(String number) {
-        if(!number.matches("\\d+")){ return "Invalid Input";}
+        if (!number.matches("\\d+")) {
+            return "Invalid Input";
+        }
         ArrayList<String> numberSections = numberSplitter(number);
         String convertedWords = "";
 
         //Handle input > 999 Thousand
         if (numberSections.size() == 3) {
-            convertedWords += sectionConverter(numberSections.get(0)) + "Million";
-            convertedWords += sectionConverter(numberSections.get(1)) + "Thousand";
-            convertedWords += sectionConverter(numberSections.get(2)) + "Dollars";
+            convertedWords += millionLengthConverter(numberSections);
         }
+
         //Handle input < 1 Million
         else if (numberSections.size() == 2) {
-            convertedWords += sectionConverter(numberSections.get(0)) + "Thousand";
-            convertedWords += sectionConverter(numberSections.get(1)) + "Dollars";
+            convertedWords += thousandLengthConverter(numberSections);
         }
 
         //Handle input < 1 Thousand
         else {
-            convertedWords += sectionConverter(numberSections.get(0)) + "Dollars";
+            convertedWords += tensLengthConverter(numberSections);
         }
         return convertedWords;
+    }
+
+
+    private static String millionLengthConverter(ArrayList<String> sections){
+        String answer = "";
+        answer += sectionConverter(sections.get(0)) + "Million";
+        answer += sectionConverter(sections.get(1)) + "Thousand";
+        answer += sectionConverter(sections.get(2)) + "Dollars";
+        return answer;
+
+    }
+
+    private static String thousandLengthConverter(ArrayList<String> sections){
+        String answer = "";
+        answer += sectionConverter(sections.get(0)) + "Thousand";
+        answer += sectionConverter(sections.get(1)) + "Dollars";
+        return answer;
+
+    }
+
+    private static String tensLengthConverter(ArrayList<String> sections){
+        return sectionConverter(sections.get(0)) + "Dollars";
     }
 
     //Uses Length of Section to Determine formatting and additional Words
     private static String sectionConverter(String section) {
         String convertedSection = "";
+
         if (section.length() == 3) {
             if (section.substring(0, 1).equals("0")) {
 
             } else {
                 convertedSection += numberToWordLookup(section.substring(0, 1)) + "Hundred";
             }
+
             if (!section.substring(1, 2).equals("0") && !section.substring(2).equals("0")) {
 
                 if (section.substring(1, 2).equals("1")) {
@@ -50,22 +74,20 @@ public class NumberToWordParser {
                 }
             }
         }
+
         if (section.length() == 2) {
             if (section.substring(0, 1).equals("1")) {
                 convertedSection += numberToWordLookup(section.substring(0));
             } else {
                 convertedSection += numberToWordLookup(section.substring(0, 1) + "0") + numberToWordLookup(section.substring(1));
             }
-
         } else {
             convertedSection += numberToWordLookup(section.substring(0));
-
         }
         return convertedSection;
     }
 
-
-    //Splits the number into arraylist items depending on its length.
+    //Splits the number into Arraylist items depending on its length.
     // These sections are then converted by section converter
     private static ArrayList<String> numberSplitter(String number) {
         int numberLength = number.length();
@@ -75,40 +97,29 @@ public class NumberToWordParser {
             numberSections.add(number.substring(0, 3));
             numberSections.add(number.substring(3, 6));
             numberSections.add(number.substring(6));
-        }
-
-        if (numberLength == 8) {
+        } else if (numberLength == 8) {
             numberSections.add(number.substring(0, 2));
             numberSections.add(number.substring(2, 5));
             numberSections.add(number.substring(5));
-        }
-
-        if (numberLength == 7) {
+        } else if (numberLength == 7) {
             numberSections.add(number.substring(0, 1));
             numberSections.add(number.substring(1, 4));
             numberSections.add(number.substring(4));
-        }
-
-        if (numberLength == 6) {
+        } else if (numberLength == 6) {
             numberSections.add(number.substring(0, 3));
             numberSections.add(number.substring(3));
-        }
-
-        if (numberLength == 5) {
+        } else if (numberLength == 5) {
             numberSections.add(number.substring(0, 2));
             numberSections.add(number.substring(2));
-        }
-
-        if (numberLength == 4) {
+        } else if (numberLength == 4) {
             numberSections.add(number.substring(0, 1));
             numberSections.add(number.substring(1));
-        }
-
-        if (numberLength <= 3) {
+        } else if (numberLength <= 3) {
             numberSections.add(number);
         }
         return numberSections;
     }
+
 
     //Switch Statement to provide lookup for numbers
     private static String numberToWordLookup(String text) {
@@ -238,8 +249,5 @@ public class NumberToWordParser {
                 break;
         }
         return convertedWord;
-
     }
-
-
 }
