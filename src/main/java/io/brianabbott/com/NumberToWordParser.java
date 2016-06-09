@@ -110,8 +110,8 @@ public class NumberToWordParser {
         return numberSections;
     }
 
-
-    public static String numberToWordLookup(String text) {
+    //Switch Statement to provide lookup for numbers
+    private static String numberToWordLookup(String text) {
         String convertedWord = "";
 
         switch (text) {
