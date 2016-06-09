@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
  */
 public class NumberToWordParserSpec {
 
+
     @Test
     public void singleDigitEntryTest(){
         String expectedWords = "ThreeDollars";
